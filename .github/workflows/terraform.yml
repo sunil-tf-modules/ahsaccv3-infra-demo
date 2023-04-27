@@ -53,10 +53,10 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        #working-directory: ./core
-        # env:
-        #   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_SUNILNGVLI }}
-        #   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_SUNILNGVLI }}
-        #   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
-        #   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_SUNILNGVLI }}
+        working-directory: ./core
+        env:
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_SUNILNGVLI }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_SUNILNGVLI }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_SUNILNGVLI }}
         run: terraform plan -var-file=dev.tfvars
