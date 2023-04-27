@@ -3,31 +3,60 @@ name: Terraform
 on:
   push:
     branches: [main]
+
+env:
+  # Terraform log verbosity
+  TF_LOG: INFO
+
+  # Azure credentials from github secrets
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_SUNILNGVLI }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_SUNILNGVLI }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_SUNILNGVLI }}
+
 jobs:
   terraform:
+    name: Terraform Infra Management
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        # Terraform code default directory
+        working-directory: ./core
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.4.0
+
       - name: Terraform Format
         id: fmt
-        working-directory: ./core
+        #working-directory: ./core
         run: terraform fmt -check
+
       - name: Terraform Init
         id: init
-        env:
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_SUNILNGVLI }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_SUNILNGVLI }}
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_SUNILNGVLI }}
-        working-directory: ./core
+        # env:
+        #   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_SUNILNGVLI }}
+        #   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_SUNILNGVLI }}
+        #   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
+        #   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_SUNILNGVLI }}
+        #working-directory: ./core
         run: terraform init
+
       - name: Terraform Validate
-        working-directory: ./core
+        id: validate
+        #working-directory: ./core
         run: terraform validate
+
       - name: Terraform Plan
-        working-directory: ./core
-        run: terraform plan
+        id: plan
+        #working-directory: ./core
+        # env:
+        #   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_SUNILNGVLI }}
+        #   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_SUNILNGVLI }}
+        #   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
+        #   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_SUNILNGVLI }}
+        run: terraform plan -var-file=dev.tfvars
