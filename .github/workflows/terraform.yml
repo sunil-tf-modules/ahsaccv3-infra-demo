@@ -14,8 +14,11 @@ jobs:
       with:
         terraform_version: 1.4.0
     - name: Terraform Init
+      working-directory: ./core
       run: terraform init
     - name: Terraform Validate
+      working-directory: ./core
       run: terraform validate
     - name: Terraform Plan
+      working-directory: ./core
       run: terraform plan
