@@ -1,62 +1,29 @@
-name: Terraform
+# File: .github/workflows/workflow.yml
 
-on:
-  push:
-    branches: [main]
+on: [push]
 
-env:
-  # Terraform log verbosity
-  TF_LOG: INFO
+name: AzureLoginSample
 
 jobs:
-  terraform:
-    name: Terraform Infra Management
+
+  build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        # Terraform code default directory
-        working-directory: ./core
     steps:
-      - uses: actions/checkout@v2
+    
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_SUNILNGVLI_SDK }}
+    
+    - run: |
+        az account show
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.4.0
-      - name: Terraform version check
-        run: |
-          terraform -version
+    - uses: actions/checkout@v2
 
-      - name: Install Azure CLI
-        run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-          az --version
-
-      - name: "Az CLI login"
-        uses: Azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS_SUNILNGVLI_SDK }}
-
-      - name: "Run az commands"
-        run: |
-          az account show
-          az group list
-          pwd
-
-      - name: Terraform Format
-        id: fmt
-        #working-directory: ./core (commented out as it has been moved to defaults)
-        run: terraform fmt -check
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -var-file=dev.tfvars
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.4.0
+  
+    - name: Terraform version check
+      run: |
+        terraform -version
