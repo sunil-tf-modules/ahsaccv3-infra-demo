@@ -9,15 +9,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    
-    - uses: azure/login@v1
+    - name: Azure Login
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_SUNILNGVLI_SDK }}
     
-    - run: |
+    - name: Check Azure connection
+      run: |
         az account show
 
-    - uses: actions/checkout@v2
+    - name: Code checkout with v2
+      uses: actions/checkout@v2
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
@@ -27,3 +29,20 @@ jobs:
     - name: Terraform version check
       run: |
         terraform -version
+    
+    - name: Check files
+      run: |
+        ls -l
+    
+    - name: Terraform init
+      id: init
+      working-directory: ./ahsaccv3-infra-demo/core/
+      run: |
+        terraform init
+    
+    - name: Terraform Plan
+      id: plan
+      working-directory: ./ahsaccv3-infra-demo/core/
+      run: |
+        terraform plan -var-file=dev.tfvars -out=dev.tfplan
+      
