@@ -20,12 +20,12 @@ terraform {
     }
   }
 
-  # backend "azurerm" {
-  #   resource_group_name = "value"
-  #   storage_account_name = "value"
-  #   container_name = "value"
-  #   key = "value"
-  # }
+  backend "azurerm" {
+    resource_group_name = "ahsaccv3-tfstates-rg"
+    storage_account_name = "ahsaccv3strgaccpoc"
+    container_name = "tfstates"
+    key = "dev-terraform.tfstate"
+  }
 }
 
 provider "azurerm" {

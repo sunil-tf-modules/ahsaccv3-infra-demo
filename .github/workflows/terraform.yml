@@ -9,22 +9,15 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Install Azure CLI from elstudio/action-install-azure-cli
-      uses: elstudio/action-install-azure-cli@v1
-
-    - name: Azure Login
-      id: az login
-      uses: azure/login@v1
+    
+    - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_SUNILNGVLI_SDK }}
     
-    - name: Run Azure cli commands
-      run: |
+    - run: |
         az account show
 
-    - name: checkout git repo
-      id: checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
@@ -34,3 +27,28 @@ jobs:
     - name: Terraform version check
       run: |
         terraform -version
+    
+    # - name: Checkout tools repo
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: sunil-tf-modules/ahsaccv3-infra-demo
+    #     ref: main
+    #     path: ahsaccv3-infra-demo
+    
+    - name: Check files
+      working-directory: ./ahsaccv3-infra-demo/core
+      run: |
+        ls -l
+    
+    - name: Terraform init
+      id: init
+      working-directory: ./ahsaccv3-infra-demo/core/
+      run: |
+        terraform init
+    
+    - name: Terraform Plan
+      id: plan
+      working-directory: ./ahsaccv3-infra-demo/core/
+      run: |
+        terraform plan -var-file=dev.tfvars -out=dev.tfplan
+      
