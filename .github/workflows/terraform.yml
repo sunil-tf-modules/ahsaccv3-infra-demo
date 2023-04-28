@@ -28,13 +28,6 @@ jobs:
       run: |
         terraform -version
     
-    # - name: Checkout tools repo
-    #   uses: actions/checkout@v2
-    #   with:
-    #     repository: sunil-tf-modules/ahsaccv3-infra-demo
-    #     ref: main
-    #     path: ahsaccv3-infra-demo
-    
     - name: Check files
       run: |
         ls -l
