@@ -45,15 +45,28 @@ jobs:
     
     - name: Terraform Plan
       id: plan
+      shell: bash
       working-directory: ./core/
       run: |
-        if [[ ${{ inputs.tf_action }} == "apply" ]]; then
-          terraform plan -var-file=dev.tfvars -out=dev.tfplan
-        elif ${{ inputs.tf_action }} == "destroy"; then
-            terraform plan -var-file=dev.tfvars -destroy
+        # Validate
+        if [ ${{ inputs.tf_action }} == "validate" ]; then
+        echo "default option - 'validate'"
+        # Apply
+        elif [ ${{ inputs.tf_action }} == "apply" ]; then
+          echo "user entered 'apply'"
+        # Destroy
+        elif [ ${{ inputs.tf_action }} == "destroy" ]; then
+          echo "user entered 'destroy'"  
         else
-          terraform validate
+          echo "no value entered"
         fi
+        #if [[ ${{ inputs.tf_action }} == "apply" ]]; then
+        #  terraform plan -var-file=dev.tfvars -out=dev.tfplan
+        #elif ${{ inputs.tf_action }} == "destroy"; then
+        #    terraform plan -var-file=dev.tfvars -destroy
+        #else
+        #  terraform validate
+        #fi
 
     - name: Terraform Action Apply/Destory
       id: terraform-action
