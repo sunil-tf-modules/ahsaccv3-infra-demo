@@ -20,17 +20,17 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     steps:
-    - name: User Input
-      shell: bash
-      run: |
-        echo "Do you want to proceed? Type Yes or No."
-        read input
-        if [ "$input" == "Yes" ]; then
-          echo "Proceeding with the workflow..."
-        else
-          echo "Aborting the workflow..."
-          exit 1
-        fi
+    - name: Ask for user input
+      run: echo "::set-output name=user_input::$(read -p 'Do you want to proceed? ' && echo $REPLY)"
+      id: get_user_input
+
+    - name: Conditional step
+      if: ${{ steps.get_user_input.outputs.user_input == 'Yes' }}
+      run: echo "Proceeding with the workflow"
+
+    - name: Conditional step 2
+      if: ${{ steps.get_user_input.outputs.user_input == 'No' }}
+      run: echo "Aborting the workflow"
 
     - name: Code checkout with v2
       uses: actions/checkout@v2
