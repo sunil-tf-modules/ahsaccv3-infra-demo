@@ -55,14 +55,15 @@ jobs:
       shell: bash
       working-directory: ./core/
       run: |
+        # Terraform Actions
         # Apply
         if [ ${{ inputs.tf_action }} == "apply" ]; then
           echo "user entered 'apply'"
-          #terraform plan -var-file=dev.tfvars -out=dev.tfplan
+          terraform plan -var-file=dev.tfvars -out=dev-${{ inputs.tf_action }}.tfplan
         # Destroy
         elif [ ${{ inputs.tf_action }} == "destroy" ]; then
           echo "user entered 'destroy'"  
-          #terraform plan -var-file=dev.tfvars -destroy
+          terraform plan -var-file=dev.tfvars -out=dev-${{ inputs.tf_action }}.tfplan -destroy
         else
           echo "no value entered"
         fi
@@ -71,5 +72,5 @@ jobs:
       id: terraform-action
       working-directory: ./core/
       run: |
-        terraform ${{ inputs.tf_action }}
+        terraform apply dev-${{ inputs.tf_action }}.tfplan
       
