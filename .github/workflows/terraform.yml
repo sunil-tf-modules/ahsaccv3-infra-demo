@@ -50,23 +50,18 @@ jobs:
       run: |
         # Validate
         if [ ${{ inputs.tf_action }} == "validate" ]; then
-        echo "default option - 'validate'"
+        echo "default option: 'validate'"
         # Apply
         elif [ ${{ inputs.tf_action }} == "apply" ]; then
           echo "user entered 'apply'"
+          #erraform plan -var-file=dev.tfvars -out=dev.tfplan
         # Destroy
         elif [ ${{ inputs.tf_action }} == "destroy" ]; then
           echo "user entered 'destroy'"  
+          #terraform plan -var-file=dev.tfvars -destroy
         else
           echo "no value entered"
         fi
-        #if [[ ${{ inputs.tf_action }} == "apply" ]]; then
-        #  terraform plan -var-file=dev.tfvars -out=dev.tfplan
-        #elif ${{ inputs.tf_action }} == "destroy"; then
-        #    terraform plan -var-file=dev.tfvars -destroy
-        #else
-        #  terraform validate
-        #fi
 
     - name: Terraform Action Apply/Destory
       id: terraform-action
