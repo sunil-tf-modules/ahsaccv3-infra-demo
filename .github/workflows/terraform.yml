@@ -22,9 +22,20 @@ jobs:
     steps:
     - name: Wait for user input
       run: |
-        read -p "Do you want to continue with this workflow? " yn
-        echo "User input: $yn"
-      shell: bash
+        echo "Do you want to continue with this workflow?"
+        read yn
+        echo "::set-output name=user_response::$yn"
+      id: user_input
+
+    - name: Check user input
+      run: |
+        echo "User input: ${{ steps.user_input.outputs.user_response }}"
+        if [ ${{ steps.user_input.outputs.user_response }} = "Yes" ]; then
+          echo "Workflow continues."
+        else
+          echo "Workflow aborted."
+          exit 1
+        fi
 
     - name: Code checkout with v2
       uses: actions/checkout@v2
