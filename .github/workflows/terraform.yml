@@ -25,8 +25,7 @@ jobs:
 
     - name: Check files
       working-directory: ./core/
-      run: |
-        ls -l
+      run: ls -l
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
@@ -37,24 +36,29 @@ jobs:
       run: |
         terraform -version
     
-    - name: Terraform Init
+    - name: Terraform Init and checks
       id: init
       working-directory: ./core/
       run: |
+        echo "Terraform Init"
         terraform init
+        sleep 1
+        echo "Terraform fmt"
+        terraform fmt --recursive
+        sleep 1
+        echo "Terraform validate"
+        terraform validate
+        sleep 1
     
     - name: Terraform ${{ inputs.tf_action }}
       id: plan
       shell: bash
       working-directory: ./core/
       run: |
-        # Validate
-        if [ ${{ inputs.tf_action }} == "validate" ]; then
-        echo "default option: 'validate'"
         # Apply
-        elif [ ${{ inputs.tf_action }} == "apply" ]; then
+        if [ ${{ inputs.tf_action }} == "apply" ]; then
           echo "user entered 'apply'"
-          #erraform plan -var-file=dev.tfvars -out=dev.tfplan
+          #terraform plan -var-file=dev.tfvars -out=dev.tfplan
         # Destroy
         elif [ ${{ inputs.tf_action }} == "destroy" ]; then
           echo "user entered 'destroy'"  
