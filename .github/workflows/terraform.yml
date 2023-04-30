@@ -20,21 +20,23 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     steps:
-    - name: User confirmation
-      uses: actions/toolkit@v2.4.2
-      with:
-        prompt: "Do you want to proceed?"
-      id: confirmation
-    - name: Handle user confirmation
-      if: ${{ steps.confirmation.outputs.answer == 'yes' }}
+    - name: Wait for user input
       run: |
-        # Do something if user confirms
-        echo "use entered: yes"
-    - name: Handle user rejection
-      if: ${{ steps.confirmation.outputs.answer == 'no' }}
+        echo "Do you want to continue with this workflow?"
+        read -r response
+        echo "User response: $response"
+      env:
+        response: ${{ env.response }}
+        
+    - name: Continue with workflow
+      if: env.response == 'yes'
       run: |
-        # Do something if user rejects
-        echo "use entered: no"
+        echo "Workflow is continuing"
+        
+    - name: Stop workflow
+      if: env.response != 'yes'
+      run: |
+        echo "Workflow is stopped"
 
     - name: Code checkout with v2
       uses: actions/checkout@v2
