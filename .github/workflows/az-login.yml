@@ -52,4 +52,10 @@ jobs:
       working-directory: ./core/
       run: |
         terraform plan -var-file=dev.tfvars -out=dev.tfplan
+
+    - name: Terraform init
+      id: apply
+      working-directory: ./core/
+      run: |
+        terraform apply "dev.tfplan"
       
