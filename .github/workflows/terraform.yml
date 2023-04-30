@@ -47,11 +47,9 @@ jobs:
       id: plan
       working-directory: ./core/
       run: |
-        if ${{ inputs.tf_action }} == "apply";
-          then
-            terraform plan -var-file=dev.tfvars -out=dev.tfplan
-        elif ${{ inputs.tf_action }} == "destroy";
-          then
+        if [[ ${{ inputs.tf_action }} == "apply" ]]; then
+          terraform plan -var-file=dev.tfvars -out=dev.tfplan
+        elif ${{ inputs.tf_action }} == "destroy"; then
             terraform plan -var-file=dev.tfvars -destroy
         else
           terraform validate
