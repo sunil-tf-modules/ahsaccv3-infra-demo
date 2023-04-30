@@ -20,6 +20,17 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     steps:
+    - name: User Input
+      run: |
+        echo "Do you want to proceed? Type Yes or No."
+        read input
+        if [ "$input" == "Yes" ]; then
+          echo "Proceeding with the workflow..."
+        else
+          echo "Aborting the workflow..."
+          exit 1
+        fi
+
     - name: Code checkout with v2
       uses: actions/checkout@v2
 
