@@ -1,8 +1,8 @@
 # File: .github/workflows/az-login.yml
 name: Terraform IAC
 
-on: 
-  [push]
+on:
+  workflow_dispatch:
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_SUNILNGVLI }}
@@ -41,7 +41,7 @@ jobs:
       run: |
         ls -l
     
-    - name: Terraform init
+    - name: Terraform Init
       id: init
       working-directory: ./core/
       run: |
@@ -53,7 +53,7 @@ jobs:
       run: |
         terraform plan -var-file=dev.tfvars -out=dev.tfplan
 
-    - name: Terraform init
+    - name: Terraform Apply
       id: apply
       working-directory: ./core/
       run: |
