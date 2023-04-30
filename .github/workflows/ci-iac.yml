@@ -1,5 +1,5 @@
 # File: .github/workflows/az-login.yml
-name: Terraform IAC
+name: CI flow
 
 on:
   workflow_dispatch:
