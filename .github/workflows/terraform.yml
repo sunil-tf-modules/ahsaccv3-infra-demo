@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       tf_action:
-        description: "Terraform Validate, Apply or Destroy"
+        description: "Terraform Apply or Destroy (def: validate)"
         default: "validate"
         type: "string"
 
@@ -47,10 +47,18 @@ jobs:
       id: plan
       working-directory: ./core/
       run: |
-        terraform plan -var-file=dev.tfvars -destroy
+        if ${{ inputs.tf_action }} == "apply";
+          then
+            terraform plan -var-file=dev.tfvars -out=dev.tfplan
+        elif ${{ inputs.tf_action }} == "destroy";
+          then
+            terraform plan -var-file=dev.tfvars -out=dev.tfplan -destroy
+        else
+          terraform validate
+        fi
 
     - name: Terraform Action Apply/Destory
-      id: apply
+      id: terraform-action
       working-directory: ./core/
       run: |
         terraform ${{ inputs.tf_action }}
