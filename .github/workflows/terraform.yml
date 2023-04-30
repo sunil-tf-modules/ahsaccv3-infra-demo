@@ -52,7 +52,7 @@ jobs:
             terraform plan -var-file=dev.tfvars -out=dev.tfplan
         elif ${{ inputs.tf_action }} == "destroy";
           then
-            terraform plan -var-file=dev.tfvars -out=dev.tfplan -destroy
+            terraform plan -var-file=dev.tfvars -destroy
         else
           terraform validate
         fi
