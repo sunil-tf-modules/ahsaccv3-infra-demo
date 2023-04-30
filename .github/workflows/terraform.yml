@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: User Input
+      shell: bash
       run: |
         echo "Do you want to proceed? Type Yes or No."
         read input
