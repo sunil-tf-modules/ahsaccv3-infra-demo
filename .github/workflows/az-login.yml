@@ -14,17 +14,9 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_SUNILNGVLI_SDK }}
     
-    # - name: Check Azure connection
-    #   run: |
-    #     az account show
-        
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.45.0
-        inlineScript: |
-          az account show
-          az storage -h
+    - name: Check Azure connection
+      run: |
+        az account show
 
     - name: Code checkout with v2
       uses: actions/checkout@v2
