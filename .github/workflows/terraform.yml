@@ -20,19 +20,11 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     steps:
-    - name: Prompt for input
+    - name: Wait for user input
       run: |
         read -p "Do you want to continue with this workflow? " yn
-        echo "::set-output name=user_response::$yn"
-      id: prompt
-
-    - name: Wait for user input
-      if: ${{ steps.prompt.outputs.user_response == 'Yes' }}
-      run: echo "User chose to continue with the workflow"
-    
-    - name: Abort the workflow
-      if: ${{ steps.prompt.outputs.user_response == 'No' }}
-      run: exit 1
+        echo "User input: $yn"
+      shell: bash
 
     - name: Code checkout with v2
       uses: actions/checkout@v2
